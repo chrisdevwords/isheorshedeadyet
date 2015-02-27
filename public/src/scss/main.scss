@@ -1,0 +1,52 @@
+@import "normalize";
+@import "mixins";
+
+$magenta: #cc08cc;
+$white: #fff;
+$black: #000;
+
+$break: 768px;
+
+html {
+    background-color: $black;
+}
+
+body {
+     /* global styles */
+    color: #fff;
+    background-color: $black;
+    font-size: 0;
+    text-align: center;
+    /* mobile styles */
+
+    @media (min-width:$break) {
+        /* desktop styles */
+    }
+}
+
+h1{
+  color: $magenta;
+}
+p {
+  color: $white;
+}
+
+.main-header {
+  font-size: 42px;
+}
+.content-wrap {
+  font-size: 18px;
+}
+
+.footer {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+
+a, a:link, a:hover, a:visited, a:active {
+    color: $magenta;
+    text-decoration: none;
+}
+

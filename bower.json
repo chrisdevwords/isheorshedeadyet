@@ -1,0 +1,23 @@
+{
+  "name": "isheorshedeadyet",
+  "main": "index.js",
+  "version": "0.0.0",
+  "authors": [
+    "chrisdevwords"
+  ],
+  "description": "Is a celebrity dead?",
+  "keywords": [
+    "celebrities"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.8.3"
+  }
+}
