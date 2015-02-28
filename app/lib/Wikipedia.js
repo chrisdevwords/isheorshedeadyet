@@ -23,7 +23,7 @@ _.extend(Wikipedia.prototype, {
         });
 
         req.done(function(resp){
-            _this.parseCelebrity(resp).done(function(data){
+            _this.parseCelebrity(resp).done(function (data) {
                 def.resolve(data);
             });
         });
@@ -35,7 +35,8 @@ _.extend(Wikipedia.prototype, {
 
         var def = JQDeferred.Deferred();
         var $ = cheerio.load(resp.data.text['*']);
-
+        var isDead;
+        var isCeleb;
         if ($('.redirectText').length > 0) {
 
             var  link = url.parse($('.redirectText').find('a').attr('href'));
@@ -43,11 +44,15 @@ _.extend(Wikipedia.prototype, {
             return this.getCelebrity(redirectName);
 
         } else {
+
+            isDead = $('.dday').length > 0 || $('.deathplace').length > 0;
+            isCeleb = $('.bday').length > 0 || $('.birthplace').length > 0;
+
             def.resolve({
                 status : 200,
                 data : {
-                    isCelebrity : $('.bday').length > 0,
-                    isDead : $('.dday').length > 0,
+                    isCelebrity : isCeleb,
+                    isDead : isDead,
                     wikiResp : resp.data
                 }
             });
@@ -63,7 +68,6 @@ _.extend(Wikipedia.prototype, {
             prop: 'text',
             page: pageTitle
         };
-        //'action=parse&format=json&prop=text&section=0&page=' + pageTitle;
         return this.getPage(querystring.stringify(params));
     },
 
