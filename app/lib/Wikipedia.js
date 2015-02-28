@@ -1,0 +1,106 @@
+'use strict';
+
+var _ = require('underscore');
+var cheerio = require('cheerio');
+var JQDeferred = require('jquery-deferred');
+var Request = require('./RequestHelper');
+var querystring = require('querystring');
+var url = require('url');
+
+function Wikipedia () {}
+
+_.extend(Wikipedia.prototype, {
+
+    getCelebrity : function (name) {
+
+        var pageTitle = name.split(' ').join('_');
+        var def = JQDeferred.Deferred();
+        var req = this.getPageText(pageTitle);
+        var _this = this;
+
+        req.fail(function(resp) {
+            def.reject(resp);
+        });
+
+        req.done(function(resp){
+            _this.parseCelebrity(resp).done(function(data){
+                def.resolve(data);
+            });
+        });
+
+        return def.promise();
+    },
+
+    parseCelebrity : function (resp) {
+
+        var def = JQDeferred.Deferred();
+        var $ = cheerio.load(resp.data.text['*']);
+
+        if ($('.redirectText').length > 0) {
+
+            var  link = url.parse($('.redirectText').find('a').attr('href'));
+            var redirectName = querystring.parse(link.search.split('?').join('')).title;
+            return this.getCelebrity(redirectName);
+
+        } else {
+            def.resolve({
+                status : 200,
+                data : {
+                    isCelebrity : $('.bday').length > 0,
+                    isDead : $('.dday').length > 0,
+                    wikiResp : resp.data
+                }
+            });
+        }
+        return def.promise();
+    },
+
+    getPageText : function (pageTitle) {
+        var params = {
+            section: 0,
+            action: 'parse',
+            format: 'json',
+            prop: 'text',
+            page: pageTitle
+        };
+        //'action=parse&format=json&prop=text&section=0&page=' + pageTitle;
+        return this.getPage(querystring.stringify(params));
+    },
+
+    getPage : function (qs) {
+        var def = JQDeferred.Deferred();
+        var req = new Request();
+        var data;
+        var cb = function (status, response) {
+            if (status === 200) {
+                data = JSON.parse(response);
+                if(_.isEmpty(data.parse)) {
+                    def.reject({
+                        status : 500,
+                        data : data.error
+                    });
+                } else {
+                    def.resolve({
+                        status : 200,
+                        data : data.parse
+                    });
+                }
+            } else {
+                def.reject({
+                    status : status,
+                    response : response
+                });
+            }
+        };
+        req.getJSON({
+            host : 'en.wikipedia.org',
+            path : '/w/api.php?' + qs
+        }, cb);
+
+
+        return def.promise();
+    }
+
+});
+
+module.exports = Wikipedia;
