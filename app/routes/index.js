@@ -2,23 +2,29 @@
 
 var express = require('express');
 var router  = express.Router();
+var Wikipedia = require('../lib/Wikipedia');
+var _ = require('underscore');
 
 /* GET home page */
 router.get('/', function (req, res) {
 
     var name = req.query.name;
-
-    if (req.params && req.params.length) {
-        //name = req.params.join(' ');
+    var search = new Wikipedia();
+    if (_.isEmpty(name)) {
+        res.render('index', {
+            serverVars : {}
+        });
+        return;
     }
-
-
-
-    res.render('index', {
-        serverVars : {
-            name : name
-        }
-    });
+    search.getCelebrity(name, false)
+        .always(function(resp) {
+            res.render('index', {
+                serverVars : {
+                    data : resp.data,
+                    name : name
+                }
+            });
+        });
 
 });
 

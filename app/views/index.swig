@@ -15,7 +15,8 @@
     {% if serverVars %}
     <script>
         window.__SERVER_VARS__ = {
-            name : "{{ serverVars.name }}"
+            name : "{{ serverVars.name }}",
+            data : {%autoescape false%}{{serverVars.data|json_encode}}{%endautoescape%}
         };
     </script>
     {% endif %}

@@ -2,57 +2,50 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
+var templates = require('../templates/templates')
 
 module.exports = Backbone.View.extend({
 
-    el : '#main',
+    el : '#content',
 
     events : {
 
     },
 
     initialize : function (options) {
+        this.model = new Backbone.Model(options.sv.data);
+        this.render();
+    },
 
-        var _this = this;
-        var msg;
+    getTemplateVars : function () {
 
-        if (_.isEmpty(options.sv.name)) {
-            _this.$('.content-wrap').html('<p>show form.</p>');
-            return;
+        var model = this.model.toJSON();
+        var header = 'Oh, hey.';
+        var msg = '';
+
+        if (model.title) {
+            msg += model.title;
+            if (!model.isCelebrity) {
+                msg += ', that\'s not a celebrity. So who cares?';
+            } else {
+                header = model.isDead ? 'Yep.' : 'Nope.';
+                msg += model.isDead ? ' is fucking dead.' : ' is not dead.';
+             }
+        } else if (model.code === 'missingtitle') {
+            header = 'Um...';
+            msg = 'Not sure who that is. Did you spell it right?';
         }
 
-        $.ajax({
-            type: "GET",
-            url: "/api/?name=" + options.sv.name,
-            contentType: "application/json; charset=utf-8",
-            async: false,
-            dataType: "json",
-            success: function (resp, textStatus, jqXHR) {
-                console.log(resp.data);
-                if (resp.data.wikiResp) {
-                    msg = resp.data.wikiResp.title;
-                    if (resp.data.isCelebrity) {
-                        if (resp.data.isDead) {
-                            msg += ' is fucking dead.'
-                        } else {
-                            msg += ' is not dead.'
-                        }
-                    } else {
-                        msg += ' is not a celebrity. Who cares?'
-                    }
-                } else {
-                    msg = 'show error.';
-                }
-                _this.$('.content-wrap').html('<p>' + msg + '</p>');
+        return _.extend({
+            header : header,
+            message : msg
+        }, model);
+    },
 
-            },
-            error: function (errorMessage) {
-                _this.$('.content-wrap').html('<p>show error.</p>');
-            }
-        });
-
-
-
+    render : function () {
+        var tmplVars = this.getTemplateVars();
+        this.$el.html(templates.main(tmplVars));
+        this.$el.append(templates.searchForm(tmplVars));
     }
 
 

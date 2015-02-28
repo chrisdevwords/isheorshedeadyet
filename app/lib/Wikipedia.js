@@ -11,7 +11,7 @@ function Wikipedia () {}
 
 _.extend(Wikipedia.prototype, {
 
-    getCelebrity : function (name) {
+    getCelebrity : function (name, includeWikiData) {
 
         var pageTitle = name.split(' ').join('_');
         var def = JQDeferred.Deferred();
@@ -23,7 +23,7 @@ _.extend(Wikipedia.prototype, {
         });
 
         req.done(function(resp){
-            _this.parseCelebrity(resp).done(function (data) {
+            _this.parseCelebrity(resp, includeWikiData).done(function (data) {
                 def.resolve(data);
             });
         });
@@ -31,7 +31,7 @@ _.extend(Wikipedia.prototype, {
         return def.promise();
     },
 
-    parseCelebrity : function (resp) {
+    parseCelebrity : function (resp, includeWikiData) {
 
         var def = JQDeferred.Deferred();
         var $ = cheerio.load(resp.data.text['*']);
@@ -41,7 +41,7 @@ _.extend(Wikipedia.prototype, {
 
             var  link = url.parse($('.redirectText').find('a').attr('href'));
             var redirectName = querystring.parse(link.search.split('?').join('')).title;
-            return this.getCelebrity(redirectName);
+            return this.getCelebrity(redirectName, includeWikiData);
 
         } else {
 
@@ -53,7 +53,8 @@ _.extend(Wikipedia.prototype, {
                 data : {
                     isCelebrity : isCeleb,
                     isDead : isDead,
-                    wikiResp : resp.data
+                    title : resp.data.title,
+                    wikiResp : includeWikiData ? resp.data : null
                 }
             });
         }

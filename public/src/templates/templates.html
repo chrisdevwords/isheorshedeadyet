@@ -1,3 +1,15 @@
 <script type="text/template" id="main">
+    <header class="main-header">
+        <h1><%= obj.header %></h1>
+    </header>
+    <div class="content-wrap">
+        <p><%= obj.message %></p>
+    </div>
+</script>
 
+<script type="text/template" id="searchForm">
+    <form role="form">
+        <input type="text" class="form-control" id="name" name="name" placeholder="Name a celebrity...">
+        <button type="submit" class="btn btn-default">They dead?</button>
+    </form>
 </script>

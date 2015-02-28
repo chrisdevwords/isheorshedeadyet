@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
     var wikipedia = new Wikipedia ();
     var name = req.query.name || '';
     name = whitelist[name.toLowerCase()] || name;
-    wikipedia.getCelebrity(name).always(function(resp){
+    wikipedia.getCelebrity(name, req.query.wikidata).always(function(resp){
         res.send(resp);
     });
 });
