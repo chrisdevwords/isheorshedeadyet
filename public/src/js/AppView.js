@@ -22,14 +22,17 @@ module.exports = Backbone.View.extend({
         var model = this.model.toJSON();
         var header = 'Oh, hey.';
         var msg = '';
+        var placeholder = 'Name a celebrity...';
 
         if (model.title) {
             msg += model.title;
             if (!model.isCelebrity) {
                 msg += ', that\'s not a celebrity. So who cares?';
+                placeholder = 'Name someone else...';
             } else {
                 header = model.isDead ? 'Yep.' : 'Nope.';
                 msg += model.isDead ? ' is fucking dead.' : ' is not dead.';
+                placeholder = 'Name another celebrity...';
              }
         } else if (model.code === 'missingtitle') {
             header = 'Um...';
@@ -38,7 +41,8 @@ module.exports = Backbone.View.extend({
 
         return _.extend({
             header : header,
-            message : msg
+            message : msg,
+            placeholder: placeholder
         }, model);
     },
 

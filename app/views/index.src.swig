@@ -14,7 +14,7 @@
     <!-- endbuild -->
 </head>
 <body>
-    <div class="site-wrapper">
+    <div class="site-wrapper container">
         {% include "./content.html" %}
     </div>
     {% if serverVars %}

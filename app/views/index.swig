@@ -9,7 +9,7 @@
     <script src="/public/dist/js/head.js"></script>
 </head>
 <body>
-    <div class="site-wrapper">
+    <div class="site-wrapper container">
         {% include "./content.html" %}
     </div>
     {% if serverVars %}
