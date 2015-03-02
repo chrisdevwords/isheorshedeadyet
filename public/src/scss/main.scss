@@ -1,5 +1,7 @@
+@import 'normalize';
+@import 'mixins';
 
-$magenta: #cc08cc;
+$magenta: #e80e8a;
 $white: #fff;
 $black: #000;
 $grey: #999;
@@ -12,10 +14,13 @@ html {
 
 body {
      /* global styles */
+    height: 100vh;
     color: #fff;
     background-color: $black;
+    @include page-font-fam;
     font-size: 0;
     text-align: center;
+    
     /* mobile styles */
 
     @media (min-width:$break) {
@@ -23,13 +28,36 @@ body {
     }
 }
 
+a, a:link, a:hover, a:visited, a:active {
+    color: $magenta;
+    text-decoration: none;
+}
+
+a.ob-link {
+  color: inherit;
+
+  &:hover, &:focus {
+    color: $magenta;
+  }
+}
+
 .site-wrapper {
-  max-width: 400px;
+  width: 90%;
+  max-width: 420px;
+  height: inherit;
+}
+
+main {
+  @include vertical-align;
 }
 
 .main-header {
-  color: $magenta;
-  font-size: 42px;
+  h1 {
+    margin-top: 0;
+    color: $magenta;
+    font-family: 'Lobster', sans-serif;
+    font-size: 3rem;
+  }
 }
 
 .content-wrap {
@@ -37,14 +65,36 @@ body {
   font-size: 18px;
 }
 
-.footer {
-  margin-top: 5px;
-  font-size: 11px;
-  color: $grey;
+form {
+  .input-group {
+    input {
+      height: 50px;
+      border: 0;
+      border-radius: 0;
+      @include page-font-fam;
+      font-size: 1.2rem;
+      outline: none;
+    }
+
+    .btn {
+      padding: 15px;
+      border: 0;
+      border-radius: 0;
+      background-color: #dfdfdf;
+      @include page-font-fam;
+      vertical-align: top;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $magenta;
+      }
+    }
+  }
 }
 
-a, a:link, a:hover, a:visited, a:active {
-    color: $magenta;
-    text-decoration: none;
+.footer {
+  margin-top: 6px;
+  font-size: .8rem;
+  color: $grey;
 }
 
