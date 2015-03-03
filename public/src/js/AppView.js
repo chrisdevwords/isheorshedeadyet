@@ -20,7 +20,7 @@ module.exports = Backbone.View.extend({
     getTemplateVars : function () {
 
         var model = this.model.toJSON();
-        var header = 'Oh, hey.';
+        var header = 'Oh shit, is';
         var msg = '';
         var placeholder = 'Name a celebrity...';
 
@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
              }
         } else if (model.code === 'missingtitle') {
             header = 'Um...';
-            msg = 'Not sure who that is. Did you spell it right?';
+            msg = 'Who the fuck is that? Did you spell that shit right?';
         }
 
         return _.extend({
